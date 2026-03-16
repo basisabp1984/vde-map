@@ -133,7 +133,7 @@ function loadGeoJSON(){
             layer.bindTooltip(
               `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;background:#fff;padding:7px 11px;border:1px solid #d8d3c8;border-radius:3px;box-shadow:0 2px 8px rgba(14,34,64,0.12)">
                 <div style="color:#0e2240;font-weight:600;font-family:'Cormorant',serif;font-size:14px">${region}</div>
-                <div style="color:#4a5568;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:2px">${ob?ob.total+' ст.':'Немає даних'}</div>
+                <div style="color:#4a5568;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:2px">${ob?ob.total+' ст.':''}</div>
               </div>`,
               { sticky:true, offset:[10,0], className:'', opacity:1 }
             ).openTooltip(e.latlng);

@@ -1,0 +1,92 @@
+/* ── MARKET: ринкова аналітика, калькулятор ── */
+
+.market-shell{display:flex;flex-direction:column;gap:12px;}
+.market-bar{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:10px 12px;}
+.market-bar-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.market-kicker{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber2);margin-bottom:4px;}
+.market-head{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--navy);line-height:1.1;}
+.market-head em{color:var(--amber);font-style:italic;}
+.market-pills{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+.mpill{padding:3px 8px;border-radius:2px;border:1px solid;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.mpill.ok{color:var(--green);background:rgba(26,106,70,0.08);border-color:rgba(26,106,70,0.25);}
+.mpill.info{color:var(--blue2);background:rgba(74,144,217,0.08);border-color:rgba(74,144,217,0.25);}
+.mpill.warn{color:var(--amber2);background:rgba(212,168,50,0.08);border-color:rgba(212,168,50,0.28);}
+.mpill.risk{color:var(--red);background:rgba(192,57,43,0.08);border-color:rgba(192,57,43,0.22);}
+.market-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--label);}
+.market-ticker{overflow:hidden;border-top:1px solid var(--border);padding-top:8px;margin-top:8px;}
+.market-ticker-inner{display:flex;gap:0;white-space:nowrap;animation:marketTicker 50s linear infinite;}
+.market-tick{display:inline-flex;align-items:center;gap:8px;padding:0 16px;border-right:1px solid var(--border);font-family:var(--mono);font-size:10px;}
+.market-tick .name{color:var(--label);}
+.market-tick .val{color:var(--text);font-weight:600;}
+.market-tick .up{color:var(--green);}
+.market-tick .down{color:var(--red);}
+@keyframes marketTicker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+.market-strip{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:4px;overflow:hidden;}
+.market-strip-item{background:var(--surface);padding:12px;}
+.ms-label{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--label);}
+.ms-value{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--navy);line-height:1.05;margin-top:4px;}
+.ms-value small{font-family:var(--mono);font-size:10px;color:var(--label);}
+.ms-delta{font-family:var(--mono);font-size:10px;margin-top:4px;}
+
+.market-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;}
+.market-title{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--label);margin-bottom:8px;}
+.market-title .accent{color:var(--amber2);}
+.market-chart{position:relative;height:190px;}
+.market-chart.sm{height:150px;}
+.market-explain{margin-top:10px;padding:8px 10px;background:var(--panel);border-left:2px solid var(--amber);border-radius:0 2px 2px 0;font-size:11px;color:var(--label);line-height:1.55;}
+.market-explain b{color:var(--navy);}
+
+.metric-stack{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
+.metric-row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--label);margin-bottom:4px;}
+.metric-row .pct{font-size:16px;font-weight:600;color:var(--amber2);}
+.metric-row .pct.blue{color:var(--blue2);}
+.metric-track{height:10px;border-radius:999px;background:var(--panel);border:1px solid var(--border);overflow:hidden;}
+.metric-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--green2));}
+.metric-fill.blue{background:linear-gradient(90deg,var(--blue),var(--blue2));}
+.metric-fill.amber{background:linear-gradient(90deg,var(--amber2),var(--amber));}
+
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding-top:8px;}
+.gauge-svg{width:170px;height:94px;}
+.gauge-labels{display:flex;justify-content:space-between;width:170px;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--label);}
+.gauge-num{font-family:var(--serif);font-size:28px;font-weight:600;color:var(--amber2);line-height:1;margin-top:6px;}
+.gauge-subtitle{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--label);margin-top:4px;text-align:center;}
+
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.calc-field{display:flex;flex-direction:column;gap:5px;}
+.calc-label{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--label);}
+.calc-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:7px 8px;font-family:var(--mono);font-size:12px;color:var(--text);outline:none;}
+.calc-input:focus{border-color:var(--amber);}
+.calc-btn{margin-top:10px;padding:8px 14px;background:var(--navy);color:#fff;border:0;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;}
+.calc-btn:hover{background:var(--navy2);}
+.econ-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.econ-box{padding:10px;background:var(--panel);border:1px solid var(--border);border-radius:3px;}
+.econ-box.winner{border-color:rgba(26,106,70,0.3);background:rgba(26,106,70,0.06);}
+.econ-label{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--label);margin-bottom:6px;}
+.econ-val{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--navy);line-height:1.1;}
+.econ-box.winner .econ-val{color:var(--green);}
+.econ-sub{font-family:var(--mono);font-size:10px;color:var(--label);margin-top:4px;}
+.winner-badge{display:inline-block;margin-top:6px;padding:2px 6px;border-radius:2px;background:var(--green);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;}
+
+.deal-table{width:100%;border-collapse:collapse;margin-top:2px;font-family:var(--mono);font-size:10px;}
+.deal-table th{padding:6px 8px;text-align:left;background:var(--panel);color:var(--label);font-size:9px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.deal-table td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text);}
+.deal-table tr:hover td{background:rgba(212,168,50,0.04);}
+.tag{display:inline-block;padding:2px 6px;border-radius:2px;font-size:9px;font-weight:600;}
+.tag-buy{background:rgba(26,106,70,0.08);color:var(--green);border:1px solid rgba(26,106,70,0.25);}
+.tag-sell{background:rgba(192,57,43,0.08);color:var(--red);border:1px solid rgba(192,57,43,0.22);}
+.tag-ana{background:rgba(74,144,217,0.08);color:var(--blue2);border:1px solid rgba(74,144,217,0.22);}
+
+.risk-list{display:flex;flex-direction:column;gap:8px;}
+.risk-item{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-left:3px solid;border-radius:2px;font-size:11px;}
+.risk-item.low{border-color:var(--green);background:rgba(26,106,70,0.06);}
+.risk-item.med{border-color:var(--amber);background:rgba(212,168,50,0.08);}
+.risk-item.high{border-color:var(--red);background:rgba(192,57,43,0.06);}
+.risk-dot{width:8px;height:8px;border-radius:50%;margin-top:3px;flex-shrink:0;}
+.risk-item.low .risk-dot{background:var(--green);}
+.risk-item.med .risk-dot{background:var(--amber);}
+.risk-item.high .risk-dot{background:var(--red);}
+.risk-text{color:var(--label);line-height:1.45;}
+.risk-text b{color:var(--navy);}
+
+@media(max-width:900px){.market-strip,.calc-row,.econ-grid{grid-template-columns:1fr;}}

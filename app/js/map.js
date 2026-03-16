@@ -119,7 +119,7 @@ function loadGeoJSON(){
           const region = getRegion(feature);
           const ob = APP.oblastStats[region];
           layer.on('mouseover', e=>{
-            if(region!==APP.selectedOblast) layer.setStyle({ fillOpacity:0.2, color:'#d4a832', weight:1.5, opacity:1 });
+            if(region!==APP.selectedOblast) layer.setStyle({ fillColor:'#4a90d9', fillOpacity:0.4, color:'#1a5fa8', weight:3, opacity:1 });
             layer.bindTooltip(
               `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;background:#fff;padding:7px 11px;border:1px solid #d8d3c8;border-radius:3px;box-shadow:0 2px 8px rgba(14,34,64,0.12)">
                 <div style="color:#0e2240;font-weight:600;font-family:'Cormorant',serif;font-size:14px">${region}</div>

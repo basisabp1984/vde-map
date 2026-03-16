@@ -101,9 +101,9 @@ function obStyle(feature, selected){
   const region = getRegion(feature);
   const ob = APP.oblastStats[region];
   const mw = ob ? ob.mw : 0;
-  if(selected) return { fillColor:'#1a3a6a', fillOpacity:0.35, color:'#d4a832', weight:2, opacity:1 };
+  if(selected) return { fillColor:'#1a3a6a', fillOpacity:0.35, color:'#d4a832', weight:2.5, opacity:1 };
   const alpha = mw>0 ? 0.08+Math.min(mw/APP.maxMw,1)*0.28 : 0.04;
-  return { fillColor:mw>0?'#d4a832':'#1a3a6a', fillOpacity:alpha, color:'#b8a090', weight:0.8, opacity:0.7 };
+  return { fillColor:mw>0?'#d4a832':'#1a3a6a', fillOpacity:alpha, color:'#5a7a9a', weight:1.8, opacity:1 };
 }
 
 function loadGeoJSON(){
@@ -123,7 +123,7 @@ function loadGeoJSON(){
             layer.bindTooltip(
               `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;background:#fff;padding:7px 11px;border:1px solid #d8d3c8;border-radius:3px;box-shadow:0 2px 8px rgba(14,34,64,0.12)">
                 <div style="color:#0e2240;font-weight:600;font-family:'Cormorant',serif;font-size:14px">${region}</div>
-                <div style="color:#4a5568;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:2px">${ob?ob.total+' ст. / '+fmt(ob.mw)+' МВт у джерелах':'Немає даних'}</div>
+                <div style="color:#4a5568;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:2px">${ob?ob.total+' ст.':'Немає даних'}</div>
               </div>`,
               { sticky:true, offset:[10,0], className:'', opacity:1 }
             ).openTooltip(e.latlng);

@@ -120,9 +120,7 @@ function obStyle(feature, selected){
 
 function loadGeoJSON(){
   if(!hasLeaflet) return;
-  fetch('https://www.geoboundaries.org/api/current/gbOpen/UKR/ADM1/')
-    .then(r=>r.json())
-    .then(meta=>{ if(!meta.simplifiedGeometryGeoJSON) throw new Error('no url'); return fetch(meta.simplifiedGeometryGeoJSON); })
+  fetch('ukraine-oblasts.geojson')
     .then(r=>r.json())
     .then(gj=>{
       APP.oblastLayer = L.geoJSON(gj,{

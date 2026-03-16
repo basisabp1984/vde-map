@@ -60,7 +60,7 @@ const overview = {
         `<span class="ob-rank">${i+1}</span>`+
         `<span class="ob-name">${ob.name}</span>`+
         `<div class="ob-barw"><div class="ob-bar" style="width:${pct}%"></div></div>`+
-        `<span class="ob-mw">${ob.mw>0?fmt(ob.mw)+' МВт у джер.':ob.total+' ст.'}</span>`;
+        `<span class="ob-mw">${ob.total} ст.</span>`;
       el.addEventListener('click',()=>oblast.select(ob.name));
       obListEl.appendChild(el);
     });

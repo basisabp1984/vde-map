@@ -97,13 +97,25 @@ function getRegion(feature){
   return Object.keys(APP.oblastStats).find(k=>_normStr(k).includes(norm)||norm.includes(_normStr(k).slice(0,6)))||raw;
 }
 
+const OB_COLORS = [
+  '#e8a838','#4a90d9','#5cb85c','#d9534f','#9b59b6',
+  '#1abc9c','#e67e22','#2980b9','#27ae60','#c0392b',
+  '#8e44ad','#16a085','#f39c12','#2471a3','#1e8449',
+  '#922b21','#6c3483','#117a65','#b7950b','#1a5276',
+  '#196f3d','#78281f','#4a235a','#0e6655','#9a7d0a',
+];
+
+function obColor(region){
+  const keys = Object.keys(APP.oblastStats).sort();
+  const idx = keys.indexOf(region);
+  return OB_COLORS[(idx>=0?idx:0) % OB_COLORS.length];
+}
+
 function obStyle(feature, selected){
   const region = getRegion(feature);
-  const ob = APP.oblastStats[region];
-  const mw = ob ? ob.mw : 0;
-  if(selected) return { fillColor:'#1a3a6a', fillOpacity:0.4, color:'#d4a832', weight:3, opacity:1 };
-  const alpha = mw>0 ? 0.1+Math.min(mw/APP.maxMw,1)*0.25 : 0.05;
-  return { fillColor:mw>0?'#d4a832':'#1a3a6a', fillOpacity:alpha, color:'#1a3a6a', weight:3, opacity:0.9 };
+  const color = obColor(region);
+  if(selected) return { fillColor:color, fillOpacity:0.6, color:'#fff', weight:3, opacity:1 };
+  return { fillColor:color, fillOpacity:0.3, color:'#fff', weight:2, opacity:1 };
 }
 
 function loadGeoJSON(){
@@ -119,7 +131,7 @@ function loadGeoJSON(){
           const region = getRegion(feature);
           const ob = APP.oblastStats[region];
           layer.on('mouseover', e=>{
-            if(region!==APP.selectedOblast) layer.setStyle({ fillColor:'#4a90d9', fillOpacity:0.4, color:'#1a5fa8', weight:3, opacity:1 });
+            if(region!==APP.selectedOblast) layer.setStyle({ fillColor:obColor(region), fillOpacity:0.6, color:'#fff', weight:3, opacity:1 });
             layer.bindTooltip(
               `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;background:#fff;padding:7px 11px;border:1px solid #d8d3c8;border-radius:3px;box-shadow:0 2px 8px rgba(14,34,64,0.12)">
                 <div style="color:#0e2240;font-weight:600;font-family:'Cormorant',serif;font-size:14px">${region}</div>

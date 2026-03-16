@@ -101,9 +101,9 @@ function obStyle(feature, selected){
   const region = getRegion(feature);
   const ob = APP.oblastStats[region];
   const mw = ob ? ob.mw : 0;
-  if(selected) return { fillColor:'#1a3a6a', fillOpacity:0.35, color:'#d4a832', weight:2.5, opacity:1 };
-  const alpha = mw>0 ? 0.08+Math.min(mw/APP.maxMw,1)*0.28 : 0.04;
-  return { fillColor:mw>0?'#d4a832':'#1a3a6a', fillOpacity:alpha, color:'#5a7a9a', weight:1.8, opacity:1 };
+  if(selected) return { fillColor:'#1a3a6a', fillOpacity:0.4, color:'#d4a832', weight:3, opacity:1 };
+  const alpha = mw>0 ? 0.1+Math.min(mw/APP.maxMw,1)*0.25 : 0.05;
+  return { fillColor:mw>0?'#d4a832':'#1a3a6a', fillOpacity:alpha, color:'#1a3a6a', weight:3, opacity:0.9 };
 }
 
 function loadGeoJSON(){

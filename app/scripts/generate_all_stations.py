@@ -29,6 +29,40 @@ OUTPUT_FILES = [
     Path(os.environ.get('OUTPUT_2', str(REPO_ROOT / 'all_stations.js'))),
 ]
 
+# ── Центроїди областей (для region_only без координат) ───────────────────────
+# Приблизні географічні центри областей України.
+# Використовуються як запасний варіант для station_id без точних координат.
+
+OBLAST_CENTROIDS = {
+    'Вінницька обл.':          (49.2331, 28.4682),
+    'Волинська обл.':          (50.7472, 25.3254),
+    'Дніпропетровська обл.':   (48.4647, 35.0462),
+    'Донецька обл.':           (48.0159, 37.8028),
+    'Житомирська обл.':        (50.2547, 28.6587),
+    'Закарпатська обл.':       (48.6208, 22.2879),
+    'Запорізька обл.':         (47.8388, 35.1396),
+    'Івано-Франківська обл.':  (48.9226, 24.7111),
+    'Київська обл.':           (50.4501, 30.5234),
+    'Кіровоградська обл.':     (48.5079, 32.2623),
+    'Луганська обл.':          (48.5740, 39.3078),
+    'Львівська обл.':          (49.8397, 24.0297),
+    'Миколаївська обл.':       (46.9750, 31.9946),
+    'Одеська обл.':            (46.4825, 30.7233),
+    'Полтавська обл.':         (49.5883, 34.5514),
+    'Рівненська обл.':         (50.6199, 26.2516),
+    'Сумська обл.':            (50.9077, 34.7981),
+    'Тернопільська обл.':      (49.5535, 25.5948),
+    'Харківська обл.':         (49.9935, 36.2304),
+    'Херсонська обл.':         (46.6354, 32.6169),
+    'Хмельницька обл.':        (49.4229, 26.9871),
+    'Черкаська обл.':          (49.4444, 32.0598),
+    'Чернівецька обл.':        (48.2921, 25.9358),
+    'Чернігівська обл.':       (51.4982, 31.2893),
+    'м. Київ':                 (50.4501, 30.5234),
+    'АР Крим':                 (45.3182, 34.4428),
+}
+
+
 # ── Нормалізація областей ────────────────────────────────────────────────────
 # Зводить різні форми назв областей до стандартного вигляду (з "обл.")
 
@@ -154,6 +188,15 @@ def row_to_station(row: dict) -> dict:
         location_precision in ('region_only', 'settlement_estimated', 'oblast_centroid')
     )
 
+    # Якщо координати відсутні — використати центроїд області як запасний варіант.
+    # Це дозволяє відображати всі станції на карті (хоча б приблизно).
+    # is_approximate вже True для таких станцій (region_only), тому карта покаже
+    # їх з відповідним маркером «приблизного» типу.
+    if lat is None or lon is None:
+        centroid = OBLAST_CENTROIDS.get(oblast)
+        if centroid:
+            lat, lon = centroid
+
     company_name = to_str_or_null(row.get('company_name', ''))
     contact_phone = to_str_or_null(row.get('contact_phone', ''))
     source_primary = to_str_or_null(row.get('source_primary', ''))
@@ -231,8 +274,12 @@ def main():
 
     total = len(stations)
     with_coords = sum(1 for s in stations if s['lat'] is not None and s['lon'] is not None)
+    exact_count = sum(1 for s in stations if s.get('location_precision') == 'exact' and s['lat'] is not None)
+    approx_count = sum(1 for s in stations if s.get('location_precision') != 'exact' and s['lat'] is not None)
+    no_coords   = sum(1 for s in stations if s['lat'] is None or s['lon'] is None)
     print(f'Станцій зчитано: {total}')
-    print(f'З координатами: {with_coords}')
+    print(f'З координатами: {with_coords}  (точних: {exact_count}, приблизних: {approx_count})')
+    print(f'Без координат (нема центроїда): {no_coords}')
 
     js_content = generate_js(stations)
 

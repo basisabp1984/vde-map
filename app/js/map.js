@@ -62,9 +62,37 @@ function makeIcon(type, approximate=false, hasMw=false){
   });
 }
 
-function buildMarkers(typeFilter='all', geoFilter='all'){
+function _markerTooltip(s){
+  return `<div style="width:min(220px,calc(100vw - 56px));font-family:var(--sans);font-size:11px;line-height:1.4;white-space:normal;overflow-wrap:anywhere">
+    <div style="font-family:'Cormorant',serif;font-size:14px;font-weight:600;color:#0e2240;line-height:1.25;margin-bottom:4px">${clampText(shortName(stationName(s)),48)}</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#4a5568;margin-bottom:6px">${typeLabel(s._type)} · ${precisionLabel(s,'tooltip')}</div>
+    <div style="color:#4a5568;font-size:11px;line-height:1.35;margin-bottom:4px">${compactRegionLabel(s)}</div>
+    <div style="color:#1a6a46;font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.35;margin-bottom:4px">${s.capacity_mw?`Потужнiсть: ${s.capacity_mw} МВт`:'Потужнiсть не знайдена'}</div>
+    <div style="color:#2a5298;font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.35">${compactContactLabel(s)}</div>
+  </div>`;
+}
+
+function buildMarkers(typeFilter='all', geoFilter='all', mwOnly=false){
   if(!hasLeaflet) return;
+
+  // Прибрати попередній MW-шар якщо є
+  if(APP.mwLayer){ APP.leafletMap.removeLayer(APP.mwLayer); APP.mwLayer=null; }
   APP.markerCluster.clearLayers();
+
+  if(mwOnly){
+    // Режим МВт: тільки станції з потужністю + точними координатами, без кластерів
+    const stations = APP.withCoords.filter(s=> s.capacity_mw && !s.is_approximate);
+    APP.mwLayer = L.layerGroup();
+    stations.forEach(s=>{
+      const m = L.marker([s.lat,s.lon], { icon: makeIcon(s._type, false, true) });
+      m.bindTooltip(_markerTooltip(s), { sticky:true, direction:'top', offset:[0,-8], opacity:1 });
+      m.on('click',()=>{ APP.stBackTo='oblast'; registry.showDetail(s); });
+      APP.mwLayer.addLayer(m);
+    });
+    APP.leafletMap.addLayer(APP.mwLayer);
+    return;
+  }
+
   APP.withCoords.filter(s=>{
     if(typeFilter!=='all' && s._type!==typeFilter) return false;
     if(geoFilter==='exact' && s.is_approximate) return false;
@@ -72,16 +100,7 @@ function buildMarkers(typeFilter='all', geoFilter='all'){
     return true;
   }).forEach(s=>{
     const m = L.marker([s.lat,s.lon], { icon: makeIcon(s._type, !!s.is_approximate, !!s.capacity_mw) });
-    m.bindTooltip(
-      `<div style="width:min(220px,calc(100vw - 56px));font-family:var(--sans);font-size:11px;line-height:1.4;white-space:normal;overflow-wrap:anywhere">
-        <div style="font-family:'Cormorant',serif;font-size:14px;font-weight:600;color:#0e2240;line-height:1.25;margin-bottom:4px">${clampText(shortName(stationName(s)),48)}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#4a5568;margin-bottom:6px">${typeLabel(s._type)} · ${precisionLabel(s,'tooltip')}</div>
-        <div style="color:#4a5568;font-size:11px;line-height:1.35;margin-bottom:4px">${compactRegionLabel(s)}</div>
-        <div style="color:#1a6a46;font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.35;margin-bottom:4px">${s.capacity_mw?`Потужнiсть: ${s.capacity_mw} МВт`:'Потужнiсть не знайдена'}</div>
-        <div style="color:#2a5298;font-family:'IBM Plex Mono',monospace;font-size:9px;line-height:1.35">${compactContactLabel(s)}</div>
-      </div>`,
-      { sticky:true, direction:'top', offset:[0,-8], opacity:1 }
-    );
+    m.bindTooltip(_markerTooltip(s), { sticky:true, direction:'top', offset:[0,-8], opacity:1 });
     m.on('click',()=>{ APP.stBackTo='oblast'; registry.showDetail(s); });
     APP.markerCluster.addLayer(m);
   });

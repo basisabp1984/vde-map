@@ -139,7 +139,7 @@ const app = {
   // ── Контроли карти ───────────────────────────────────
 
   _initMapControls(){
-    let typeFilter = 'all', geoFilter = 'all';
+    let typeFilter = 'all', geoFilter = 'all', mwOnly = false;
 
     document.querySelectorAll('.fbtn[data-type]').forEach(btn=>{
       btn.addEventListener('click',()=>{
@@ -147,7 +147,7 @@ const app = {
         document.querySelectorAll('.fbtn[data-type]').forEach(b=>{
           b.className='fbtn'+(b.dataset.type==='all'&&typeFilter==='all'?' fa':b.dataset.type===typeFilter?' f'+b.dataset.type.charAt(0):'');
         });
-        buildMarkers(typeFilter, geoFilter);
+        buildMarkers(typeFilter, geoFilter, mwOnly);
       });
     });
 
@@ -155,8 +155,14 @@ const app = {
       btn.addEventListener('click',()=>{
         geoFilter = btn.dataset.geo;
         document.querySelectorAll('.fbtn[data-geo]').forEach(b=>b.classList.toggle('fa', b.dataset.geo===geoFilter));
-        buildMarkers(typeFilter, geoFilter);
+        buildMarkers(typeFilter, geoFilter, mwOnly);
       });
+    });
+
+    document.getElementById('mw-filter-btn')?.addEventListener('click', ()=>{
+      mwOnly = !mwOnly;
+      document.getElementById('mw-filter-btn').classList.toggle('fa', mwOnly);
+      buildMarkers(typeFilter, geoFilter, mwOnly);
     });
   },
 

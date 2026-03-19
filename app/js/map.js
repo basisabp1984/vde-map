@@ -50,9 +50,9 @@ function showMapFallback(message){
   showStateNote(mapEl, `<b>Карта тимчасово недоступна.</b><br>${message}`, true);
 }
 
-function makeIcon(type, approximate=false){
+function makeIcon(type, approximate=false, hasMw=false){
   if(!hasLeaflet) return null;
-  const c = type==='solar'?'#d4a832':type==='wind'?'#4a90d9':'#8a9ab0';
+  const c = hasMw ? '#e53e3e' : (type==='solar'?'#d4a832':type==='wind'?'#4a90d9':'#8a9ab0');
   const size = approximate ? 10 : 11;
   const shape = approximate ? 'border-radius:2px;opacity:0.72;' : 'border-radius:50%;';
   const border = approximate ? `2px dashed ${c}` : '2px solid rgba(255,255,255,0.85)';
@@ -71,7 +71,7 @@ function buildMarkers(typeFilter='all', geoFilter='all'){
     if(geoFilter==='approx' && !s.is_approximate) return false;
     return true;
   }).forEach(s=>{
-    const m = L.marker([s.lat,s.lon], { icon: makeIcon(s._type, !!s.is_approximate) });
+    const m = L.marker([s.lat,s.lon], { icon: makeIcon(s._type, !!s.is_approximate, !!s.capacity_mw) });
     m.bindTooltip(
       `<div style="width:min(220px,calc(100vw - 56px));font-family:var(--sans);font-size:11px;line-height:1.4;white-space:normal;overflow-wrap:anywhere">
         <div style="font-family:'Cormorant',serif;font-size:14px;font-weight:600;color:#0e2240;line-height:1.25;margin-bottom:4px">${clampText(shortName(stationName(s)),48)}</div>
@@ -128,17 +128,7 @@ function loadGeoJSON(){
         onEachFeature:(feature,layer)=>{
           const region = getRegion(feature);
           const ob = APP.oblastStats[region];
-          layer.on('mouseover', e=>{
-            if(region!==APP.selectedOblast) layer.setStyle({ fillColor:obColor(region), fillOpacity:0.6, color:'#fff', weight:3, opacity:1 });
-            layer.bindTooltip(
-              `<div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;background:#fff;padding:7px 11px;border:1px solid #d8d3c8;border-radius:3px;box-shadow:0 2px 8px rgba(14,34,64,0.12)">
-                <div style="color:#0e2240;font-weight:600;font-family:'Cormorant',serif;font-size:14px">${region}</div>
-                <div style="color:#4a5568;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:2px">${ob?ob.total+' ст.':''}</div>
-              </div>`,
-              { sticky:true, offset:[10,0], className:'', opacity:1 }
-            ).openTooltip(e.latlng);
-          });
-          layer.on('mouseout',()=>{ if(region!==APP.selectedOblast) APP.oblastLayer.resetStyle(layer); layer.closeTooltip(); });
+          layer.on('mouseout',()=>{ if(region!==APP.selectedOblast) APP.oblastLayer.resetStyle(layer); });
           layer.on('click',()=>oblast.select(region));
         }
       }).addTo(APP.leafletMap);
